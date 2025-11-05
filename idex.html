@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Presentación</title>
+    <!-- Incluimos Tailwind CSS para un diseño rápido y moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilo para la fuente Inter */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Aseguramos que el contenedor principal ocupe la pantalla y esté centrado */
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden; /* Evita el scroll de la página principal */
+        }
+        /* Clase para las diapositivas */
+        .slide {
+            display: none; /* Ocultas por defecto */
+            width: 100%;
+            height: 100%;
+            padding: 2rem;
+            box-sizing: border-box;
+            overflow-y: auto; /* Scroll para diapositivas con mucho contenido */
+            animation: fadeIn 0.5s; /* Animación simple */
+        }
+        /* Clase para mostrar la diapositiva activa */
+        .slide.active {
+            display: block;
+        }
+        /* Animación de fundido */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col h-screen">
+
+    <!-- Contenedor principal de la presentación -->
+    <main id="presentation-container" class="w-full h-full flex-grow relative bg-white shadow-lg rounded-lg max-w-4xl mx-auto my-8 border border-gray-200">
+        
+        <!-- Diapositiva 1: Título -->
+        <div class="slide active">
+            <div class="flex flex-col items-center justify-center h-full text-center">
+                <h1 class="text-5xl font-bold text-blue-700 mb-4">Título de tu Presentación</h1>
+                <p class="text-2xl text-gray-600">Un subtítulo o nombre del presentador</p>
+                <p class="mt-8 text-lg text-gray-500">Usa las flechas de abajo para navegar.</p>
+            </div>
+        </div>
+
+        <!-- Diapositiva 2: Contenido General -->
+        <div class="slide">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-6 border-b-2 border-blue-500 pb-2">Diapositiva 2: Introducción</h2>
+            <p class="text-lg text-gray-700 mb-4">
+                Este es un párrafo de ejemplo. Puedes reemplazar este texto con el contenido que desees.
+            </p>
+            <ul class="list-disc list-inside text-lg text-gray-700 space-y-2">
+                <li>Punto clave número uno.</li>
+                <li>Punto clave número dos.</li>
+                <li>Una breve explicación de un concepto.</li>
+            </ul>
+        </div>
+
+        <!-- Diapositiva 3: Con Imagen -->
+        <div class="slide">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-6">Diapositiva 3: Contenido con Imagen</h2>
+            <div class="md:flex md:space-x-6">
+                <div class="md:w-1/2">
+                    <p class="text-lg text-gray-700 mb-4">
+                        Aquí puedes describir una idea que se complementa con un elemento visual.
+                        La imagen de la derecha es un marcador de posición.
+                    </p>
+                    <p class="text-lg text-gray-700">
+                        Puedes usar imágenes de <a href="https://placeholder.co" target="_blank" class="text-blue-500 hover:underline">placeholder.co</a> para tus maquetas.
+                    </p>
+                </div>
+                <div class="md:w-1/2 mt-4 md:mt-0 flex items-center justify-center">
+                    <img src="https://placehold.co/400x300/EBF8FF/3182CE?text=Tu+Imagen+Aquí" 
+                         alt="Imagen de marcador de posición" 
+                         class="rounded-lg shadow-md"
+                         onerror="this.src='https://placehold.co/400x300/EBF8FF/3182CE?text=Error+al+cargar';">
+                </div>
+            </div>
+        </div>
+
+        <!-- Diapositiva 4: Conclusión -->
+        <div class="slide">
+            <div class="flex flex-col items-center justify-center h-full text-center">
+                <h1 class="text-5xl font-bold text-green-700 mb-4">¡Gracias!</h1>
+                <p class="text-2xl text-gray-600">Preguntas y Respuestas</p>
+            </div>
+        </div>
+
+        <!-- Agrega más diapositivas aquí copiando la estructura <div class="slide">...</div> -->
+
+    </main>
+
+    <!-- Controles de Navegación -->
+    <footer class="w-full max-w-4xl mx-auto py-4">
+        <div class="flex justify-between items-center px-4">
+            <!-- Botón Anterior -->
+            <button id="prevBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                Anterior
+            </button>
+            
+            <!-- Contador de Diapositivas -->
+            <span id="slide-counter" class="text-lg text-gray-700 font-medium">
+                Diapositiva 1 / 4
+            </span>
+
+            <!-- Botón Siguiente -->
+            <button id="nextBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                Siguiente
+            </button>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Seleccionar elementos del DOM
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const slideCounter = document.getElementById('slide-counter');
+            
+            let currentSlide = 0;
+            const totalSlides = slides.length;
+
+            /**
+             * Muestra la diapositiva especificada por el índice.
+             * Oculta todas las demás y actualiza los controles.
+             * @param {number} slideIndex - El índice de la diapositiva a mostrar.
+             */
+            function showSlide(slideIndex) {
+                // Ocultar todas las diapositivas
+                slides.forEach((slide) => {
+                    slide.classList.remove('active');
+                });
+
+                // Mostrar la diapositiva actual
+                if (slides[slideIndex]) {
+                    slides[slideIndex].classList.add('active');
+                }
+
+                // Actualizar contador
+                slideCounter.textContent = `Diapositiva ${slideIndex + 1} / ${totalSlides}`;
+
+                // Habilitar/deshabilitar botones de navegación
+                // Botón "Anterior"
+                if (slideIndex === 0) {
+                    prevBtn.disabled = true;
+                } else {
+                    prevBtn.disabled = false;
+                }
+
+                // Botón "Siguiente"
+                if (slideIndex === totalSlides - 1) {
+                    nextBtn.disabled = true;
+                } else {
+                    nextBtn.disabled = false;
+                }
+            }
+
+            /**
+             * Navega a la siguiente diapositiva.
+             */
+            function goToNextSlide() {
+                if (currentSlide < totalSlides - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            }
+
+            /**
+             * Navega a la diapositiva anterior.
+             */
+            function goToPrevSlide() {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            }
+
+            // --- Event Listeners ---
+            
+            // Clic en los botones
+            nextBtn.addEventListener('click', goToNextSlide);
+            prevBtn.addEventListener('click', goToPrevSlide);
+
+            // Navegación con teclas de flecha (Izquierda/Derecha)
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'ArrowRight') {
+                    goToNextSlide();
+                } else if (event.key === 'ArrowLeft') {
+                    goToPrevSlide();
+                }
+            });
+
+            // Inicializar la presentación en la primera diapositiva
+            showSlide(currentSlide);
+        });
+    </script>
+
+</body>
+</html>
