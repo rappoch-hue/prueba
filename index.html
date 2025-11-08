@@ -3,206 +3,578 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Presentación</title>
-    <!-- Incluimos Tailwind CSS para un diseño rápido y moderno -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Curso de Automatización Industrial</title>
     <style>
-        /* Estilo para la fuente Inter */
         body {
-            font-family: 'Inter', sans-serif;
-        }
-        /* Aseguramos que el contenedor principal ocupe la pantalla y esté centrado */
-        html, body {
-            height: 100%;
             margin: 0;
-            overflow: hidden; /* Evita el scroll de la página principal */
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom right, #ADD8E6, #D3D3D3); /* Degradado Celeste a Gris */
+            color: #333;
+            overflow: hidden; /* Oculta el scroll por defecto */
         }
-        /* Clase para las diapositivas */
+
+        .presentation-container {
+            display: flex;
+            width: 100vw;
+            height: calc(100vh - 60px); /* Altura de la vista menos la barra de navegación */
+            overflow: hidden;
+            position: relative;
+        }
+
         .slide {
-            display: none; /* Ocultas por defecto */
-            width: 100%;
+            min-width: 100vw;
             height: 100%;
-            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
             box-sizing: border-box;
-            overflow-y: auto; /* Scroll para diapositivas con mucho contenido */
-            animation: fadeIn 0.5s; /* Animación simple */
+            transition: transform 0.5s ease-in-out;
+            text-align: center;
         }
-        /* Clase para mostrar la diapositiva activa */
-        .slide.active {
+
+        .slide-content {
+            background-color: rgba(255, 255, 255, 0.85); /* Fondo blanco semitransparente para el contenido */
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            max-width: 900px;
+            text-align: left;
+        }
+
+        .slide h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+
+        .slide h2 {
+            color: #34495e;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .slide h3 {
+            color: #555;
+            margin-bottom: 10px;
+            font-size: 1.4em;
+        }
+
+        .slide p {
+            line-height: 1.6;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .slide ul {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .slide ul li {
+            background-color: #ecf0f1;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            font-size: 1.1em;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide ul li::before {
+            content: '•';
+            color: #3498db;
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        .navigation-bar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 60px;
+            background-color: #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+        .nav-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-button:hover {
+            background-color: #2980b9;
+        }
+
+        .nav-button.active {
+            background-color: #e67e22;
+            font-weight: bold;
+        }
+
+        .nav-button:disabled {
+            background-color: #7f8c8d;
+            cursor: not-allowed;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .grid-item {
+            background-color: #f0f8ff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .grid-item h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .grid-item p {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .grid-item .icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            color: #3498db;
+        }
+
+        .image-container {
+            margin-top: 20px;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
             display: block;
         }
-        /* Animación de fundido */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+
+        .list-with-icons ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: left;
+            margin: 0 auto;
+            max-width: 700px;
+        }
+
+        .list-with-icons li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            background-color: transparent;
+            box-shadow: none;
+            padding: 0;
+        }
+
+        .list-with-icons li .icon {
+            font-size: 1.5em;
+            color: #3498db;
+            margin-right: 15px;
+            min-width: 30px; /* Para alinear el texto si los iconos tienen diferente tamaño */
+            text-align: center;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .slide-content {
+                padding: 20px;
+                max-width: 95%;
+            }
+
+            .slide h1 {
+                font-size: 1.8em;
+            }
+
+            .slide h2 {
+                font-size: 1.4em;
+            }
+
+            .slide p {
+                font-size: 0.9em;
+            }
+
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-button {
+                padding: 8px 12px;
+                margin: 0 5px;
+                font-size: 0.9em;
+            }
+        }
+
+        /* Specific styles for lists with bullet points */
+        .bullet-list {
+            list-style-type: disc;
+            padding-left: 25px;
+            text-align: left;
+            max-width: 700px;
+            margin: 20px auto;
+        }
+        .bullet-list li {
+            background-color: transparent;
+            box-shadow: none;
+            padding: 5px 0;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+            display: list-item; /* Override flex for regular list behavior */
+        }
+        .bullet-list li::before {
+            content: none; /* Remove custom bullet */
+        }
+
+        /* Style for two-column content */
+        .two-column-layout {
+            display: flex;
+            flex-wrap: wrap; /* Allows columns to wrap on smaller screens */
+            gap: 40px;
+            margin-top: 30px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .two-column-layout > div {
+            flex: 1; /* Makes columns take equal width */
+            min-width: 300px; /* Minimum width for columns before wrapping */
+        }
+        .two-column-layout .image-container {
+            flex: 1; /* Make image container a column */
+            margin: 0; /* Reset margins for column layout */
+            max-width: 500px; /* Adjust max-width for column image */
+        }
+        .two-column-layout .text-content {
+            flex: 1; /* Make text content a column */
+            text-align: left;
+        }
+        .two-column-layout .text-content h3, .two-column-layout .text-content p {
+            text-align: left;
+        }
+        @media (max-width: 768px) {
+            .two-column-layout {
+                flex-direction: column; /* Stack columns on small screens */
+            }
+            .two-column-layout .image-container {
+                width: 90%;
+            }
         }
     </style>
 </head>
-<body class="bg-gray-100 flex flex-col h-screen">
+<body>
 
-    <!-- Contenedor principal de la presentación -->
-    <main id="presentation-container" class="w-full h-full flex-grow relative bg-white shadow-lg rounded-lg max-w-4xl mx-auto my-8 border border-gray-200">
-        
-        <!-- Diapositiva 1: Título -->
-        <div class="slide active">
-            <div class="flex flex-col items-center justify-center h-full text-center">
-                <h1 class="text-5xl font-bold text-blue-700 mb-4">Título de tu Presentación</h1>
-                <p class="text-2xl text-gray-600">Un subtítulo o nombre del presentador</p>
-                <p class="mt-8 text-lg text-gray-500">Usa las flechas de abajo para navegar.</p>
-            </div>
-        </div>
-
-        <!-- Diapositiva 2: Contenido General -->
+    <div class="presentation-container" id="presentationContainer">
+        <!-- Slide 1: Título del Curso (Reemplazado con la nueva imagen) -->
         <div class="slide">
-            <h2 class="text-3xl font-semibold text-gray-800 mb-6 border-b-2 border-blue-500 pb-2">Diapositiva 2: Introducción</h2>
-            <p class="text-lg text-gray-700 mb-4">
-                Este es un párrafo de ejemplo. Puedes reemplazar este texto con el contenido que desees.
-            </p>
-            <ul class="list-disc list-inside text-lg text-gray-700 space-y-2">
-                <li>Punto clave número uno.</li>
-                <li>Punto clave número dos.</li>
-                <li>Una breve explicación de un concepto.</li>
-            </ul>
-        </div>
-
-        <!-- Diapositiva 3: Con Imagen -->
-        <div class="slide">
-            <h2 class="text-3xl font-semibold text-gray-800 mb-6">Diapositiva 3: Contenido con Imagen</h2>
-            <div class="md:flex md:space-x-6">
-                <div class="md:w-1/2">
-                    <p class="text-lg text-gray-700 mb-4">
-                        Aquí puedes describir una idea que se complementa con un elemento visual.
-                        La imagen de la derecha es un marcador de posición.
-                    </p>
-                    <p class="text-lg text-gray-700">
-                        Puedes usar imágenes de <a href="https://placeholder.co" target="_blank" class="text-blue-500 hover:underline">placeholder.co</a> para tus maquetas.
-                    </p>
-                </div>
-                <div class="md:w-1/2 mt-4 md:mt-0 flex items-center justify-center">
-                    <img src="https://placehold.co/400x300/EBF8FF/3182CE?text=Tu+Imagen+Aquí" 
-                         alt="Imagen de marcador de posición" 
-                         class="rounded-lg shadow-md"
-                         onerror="this.src='https://placehold.co/400x300/EBF8FF/3182CE?text=Error+al+cargar';">
+            <div class="slide-content">
+                <h1>CURSO DE AUTOMATIZACIÓN INDUSTRIAL CON PLC LOGO!</h1>
+                <div class="image-container">
+                    <img src="https://i.ibb.co/L9H891h/image-1.png" alt="Imagen principal del curso de automatización con PLC LOGO!">
                 </div>
             </div>
         </div>
 
-        <!-- Diapositiva 4: Conclusión -->
+        <!-- Slide 2: Estructura General del Curso y Objetivo General (Combinado de las imágenes 2 y 3) -->
         <div class="slide">
-            <div class="flex flex-col items-center justify-center h-full text-center">
-                <h1 class="text-5xl font-bold text-green-700 mb-4">¡Gracias!</h1>
-                <p class="text-2xl text-gray-600">Preguntas y Respuestas</p>
+            <div class="slide-content">
+                <h2>ESTRUCTURA GENERAL DEL CURSO</h2>
+                <ul class="bullet-list">
+                    <li><strong>Duración:</strong> 4 clases – 4 unidades temáticas</li>
+                    <li><strong>Modalidad:</strong> Teórico-práctica</li>
+                    <li><strong>Plataforma de trabajo:</strong> LOGO! Soft Comfort, CADeSIMU, entorno HMI/SCADA (LWE)</li>
+                </ul>
+                <br>
+                <h2>OBJETIVO GENERAL</h2>
+                <p>Dotar al alumno de las habilidades teórico-prácticas necesarias para comprender los requerimientos, diseñar, construir y programar sistemas de automatización simples utilizando micro PLC's y componentes electromecánicos, aplicables a pequeñas instalaciones y procesos industriales.</p>
             </div>
         </div>
 
-        <!-- Agrega más diapositivas aquí copiando la estructura <div class="slide">...</div> -->
-
-    </main>
-
-    <!-- Controles de Navegación -->
-    <footer class="w-full max-w-4xl mx-auto py-4">
-        <div class="flex justify-between items-center px-4">
-            <!-- Botón Anterior -->
-            <button id="prevBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
-                Anterior
-            </button>
-            
-            <!-- Contador de Diapositivas -->
-            <span id="slide-counter" class="text-lg text-gray-700 font-medium">
-                Diapositiva 1 / 4
-            </span>
-
-            <!-- Botón Siguiente -->
-            <button id="nextBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
-                Siguiente
-            </button>
+        <!-- Slide 3: Diagrama General del Curso (Unidades) -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>DIAGRAMA GENERAL DEL CURSO</h2>
+                <h3>UNIDAD 1: LÓGICA DE RELÉ Y AUTOMATIZACIÓN BÁSICA</h3>
+                <ul class="bullet-list">
+                    <li>Equipamientos eléctricos, contactores, comandos, simbología, esquemas funcionales.</li>
+                </ul>
+                <h3>UNIDAD 2: INTRODUCCIÓN AL PLC LOGO!</h3>
+                <ul class="bullet-list">
+                    <li>Entradas, salidas, modos RUN/STOP, lenguaje KOP, funciones lógicas básicas.</li>
+                </ul>
+                <h3>UNIDAD 3: AUTOMATIZACIÓN DE UN PROCESO INDUSTRIAL</h3>
+                <ul class="bullet-list">
+                    <li>Áreas de memoria, SET/RESET, temporizadores, contadores, simulación de cinta transportadora.</li>
+                </ul>
+                <h3>UNIDAD 4: HMI Y MONITOREO SCADA</h3>
+                <ul class="bullet-list">
+                    <li>Dashboard, LWE, Mapeo de variables, control virtual de procesos.</li>
+                </ul>
+            </div>
         </div>
-    </footer>
+
+        <!-- Slide 4: Habilidades a Adquirir -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>HABILIDADES A ADQUIRIR</h2>
+                <ul class="bullet-list">
+                    <li>Diseñar soluciones a requerimientos "simples" de automatización.</li>
+                    <li>Comprender las funciones lógicas y su aplicación en programación ladder.</li>
+                    <li>Identificar y utilizar entradas digitales, salidas y actuadores.</li>
+                    <li>Reconocer elementos de mando y señalización en sistemas automatizados.</li>
+                    <li>Configurar y monitorear procesos en entornos HMI/SCADA.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 5: ¡BIENVENIDOS A LA ERA DE LA AUTOMATIZACIÓN! -->
+        <div class="slide">
+            <div class="slide-content">
+                <h1>¡BIENVENIDOS A LA ERA DE LA AUTOMATIZACIÓN!</h1>
+                <h3>CÓMO LA TECNOLOGÍA ESTÁ TRANSFORMANDO EL MUNDO</h3>
+                <div class="image-container">
+                    <img src="https://i.ibb.co/sK4y08h/image-5.png" alt="Robots industriales y tecnología de automatización">
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: ¿QUÉ ES LA AUTOMATIZACIÓN? -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>¿QUÉ ES LA AUTOMATIZACIÓN?</h2>
+                <ul class="bullet-list">
+                    <li>Es el uso de tecnología para realizar tareas sin intervención humana directa.</li>
+                    <li>¡La revolución ya está aquí!</li>
+                </ul>
+                <div class="two-column-layout">
+                    <div class="image-container">
+                        <img src="https://i.ibb.co/2gCcz4b/image-6-left.png" alt="Diagrama de válvula de llenado">
+                    </div>
+                    <div class="image-container">
+                        <img src="https://i.ibb.co/sK4y08h/image-5.png" alt="Robots industriales">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: INDUSTRIA 1.0 a 4.0 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>EVOLUCIÓN INDUSTRIAL</h2>
+                <div class="image-container" style="max-width: 100%;">
+                    <img src="https://i.ibb.co/9cc83zG/image-7.png" alt="Gráfico de Industria 1.0 a Industria 4.0">
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: INDUSTRIA 5.0 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>INDUSTRIA 5.0: HUMANOS + ROBOTS + MEDIO AMBIENTE</h2>
+                <ul class="bullet-list">
+                    <li>La nueva era busca equilibrar la tecnología con la creatividad humana y la sostenibilidad.</li>
+                </ul>
+                <div class="two-column-layout">
+                    <div class="image-container">
+                        <img src="https://i.ibb.co/m0f6s4x/image-8-left.png" alt="Mano robótica sosteniendo una planta">
+                    </div>
+                    <div class="image-container">
+                        <img src="https://i.ibb.co/cDQ77C1/image-8-right.png" alt="Ingeniero trabajando con robots">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: EJEMPLOS DE ROBOTS INDUSTRIALES -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>EJEMPLOS DE ROBOTS INDUSTRIALES</h2>
+                <ul class="bullet-list">
+                    <li>Ensamblaje de autos</li>
+                    <li>Producción de alimentos</li>
+                    <li>Inspección de calidad</li>
+                    <li>Industria farmacéutica</li>
+                </ul>
+                <div class="two-column-layout">
+                    <div class="image-container">
+                        <img src="https://i.ibb.co/F8x8d01/image-9-top-right.png" alt="Fábrica de autos automatizada">
+                    </div>
+                    <div class="image-container">
+                        <img src="https://i.ibb.co/K2K7fRj/image-9-bottom.png" alt="Robots en una línea de producción">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: ¿CÓMO FUNCIONA LA IA EN LA AUTOMATIZACIÓN? -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>¿CÓMO FUNCIONA LA IA EN LA AUTOMATIZACIÓN?</h2>
+                <ul class="bullet-list">
+                    <li>Desde asistentes virtuales hasta diagnósticos médicos, la IA está revolucionando todo.</li>
+                </ul>
+                <div class="image-container">
+                    <img src="https://i.ibb.co/gST2FpP/image-10.png" alt="Ilustración de Inteligencia Artificial">
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: DOMÓTICA: HOGARES INTELIGENTES -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>DOMÓTICA: HOGARES INTELIGENTES</h2>
+                <div class="two-column-layout">
+                    <div class="image-container">
+                        <img src="https://i.ibb.co/CByP6k1/image-11-left.png" alt="Persona usando un smartphone para controlar un hogar inteligente">
+                    </div>
+                    <div class="text-content">
+                        <ul class="bullet-list">
+                            <li>Control de luces y temperatura</li>
+                            <li>Seguridad y monitoreo remoto</li>
+                            <li>Electrodomésticos inteligentes</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: URBÓTICA: CIUDADES DEL FUTURO -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>URBÓTICA: CIUDADES DEL FUTURO</h2>
+                <div class="two-column-layout">
+                    <div class="text-content">
+                        <ul class="bullet-list">
+                            <li>Semáforos inteligentes</li>
+                            <li>Transporte automatizado</li>
+                            <li>Gestión de residuos con IA</li>
+                        </ul>
+                    </div>
+                    <div class="image-container">
+                        <img src="https://i.ibb.co/tZQ24s9/image-12.png" alt="Diagrama de ciudad inteligente con coches autónomos y semáforos inteligentes">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: INMÓTICA: EDIFICIOS INTELIGENTES -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>INMÓTICA: EDIFICIOS INTELIGENTES</h2>
+                <div class="two-column-layout">
+                    <div class="text-content">
+                        <ul class="bullet-list">
+                            <li>Control de accesos y energía</li>
+                            <li>Climatización eficiente</li>
+                            <li>Seguridad automatizada</li>
+                        </ul>
+                    </div>
+                    <div class="image-container">
+                        <img src="https://i.ibb.co/Yc53L2d/image-13.png" alt="Diagrama de un edificio inteligente con sistemas de control">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Puedes añadir más slides aquí siguiendo el mismo patrón -->
+
+        <div class="slide">
+            <div class="slide-content">
+                <h1>Gracias</h1>
+                <p>Quedamos a su disposición para cualquier consulta.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="navigation-bar">
+        <button class="nav-button" id="prevButton" disabled>Anterior</button>
+        <div id="pageIndicators"></div>
+        <button class="nav-button" id="nextButton">Siguiente</button>
+    </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Seleccionar elementos del DOM
-            const slides = document.querySelectorAll('.slide');
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            const slideCounter = document.getElementById('slide-counter');
-            
-            let currentSlide = 0;
-            const totalSlides = slides.length;
+        const presentationContainer = document.getElementById('presentationContainer');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const pageIndicators = document.getElementById('pageIndicators');
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+        const totalSlides = slides.length;
 
-            /**
-             * Muestra la diapositiva especificada por el índice.
-             * Oculta todas las demás y actualiza los controles.
-             * @param {number} slideIndex - El índice de la diapositiva a mostrar.
-             */
-            function showSlide(slideIndex) {
-                // Ocultar todas las diapositivas
-                slides.forEach((slide) => {
-                    slide.classList.remove('active');
+        function updateSlidePosition() {
+            presentationContainer.style.transform = `translateX(-${currentSlide * 100}vw)`;
+            updateNavigationButtons();
+            updatePageIndicators();
+        }
+
+        function updateNavigationButtons() {
+            prevButton.disabled = currentSlide === 0;
+            nextButton.disabled = currentSlide === totalSlides - 1;
+        }
+
+        function updatePageIndicators() {
+            pageIndicators.innerHTML = ''; // Clear previous indicators
+            for (let i = 0; i < totalSlides; i++) {
+                const indicator = document.createElement('button');
+                indicator.classList.add('nav-button');
+                indicator.textContent = i + 1;
+                if (i === currentSlide) {
+                    indicator.classList.add('active');
+                }
+                indicator.addEventListener('click', () => {
+                    currentSlide = i;
+                    updateSlidePosition();
                 });
-
-                // Mostrar la diapositiva actual
-                if (slides[slideIndex]) {
-                    slides[slideIndex].classList.add('active');
-                }
-
-                // Actualizar contador
-                slideCounter.textContent = `Diapositiva ${slideIndex + 1} / ${totalSlides}`;
-
-                // Habilitar/deshabilitar botones de navegación
-                // Botón "Anterior"
-                if (slideIndex === 0) {
-                    prevBtn.disabled = true;
-                } else {
-                    prevBtn.disabled = false;
-                }
-
-                // Botón "Siguiente"
-                if (slideIndex === totalSlides - 1) {
-                    nextBtn.disabled = true;
-                } else {
-                    nextBtn.disabled = false;
-                }
+                pageIndicators.appendChild(indicator);
             }
+        }
 
-            /**
-             * Navega a la siguiente diapositiva.
-             */
-            function goToNextSlide() {
-                if (currentSlide < totalSlides - 1) {
-                    currentSlide++;
-                    showSlide(currentSlide);
-                }
+        prevButton.addEventListener('click', () => {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlidePosition();
             }
-
-            /**
-             * Navega a la diapositiva anterior.
-             */
-            function goToPrevSlide() {
-                if (currentSlide > 0) {
-                    currentSlide--;
-                    showSlide(currentSlide);
-                }
-            }
-
-            // --- Event Listeners ---
-            
-            // Clic en los botones
-            nextBtn.addEventListener('click', goToNextSlide);
-            prevBtn.addEventListener('click', goToPrevSlide);
-
-            // Navegación con teclas de flecha (Izquierda/Derecha)
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'ArrowRight') {
-                    goToNextSlide();
-                } else if (event.key === 'ArrowLeft') {
-                    goToPrevSlide();
-                }
-            });
-
-            // Inicializar la presentación en la primera diapositiva
-            showSlide(currentSlide);
         });
+
+        nextButton.addEventListener('click', () => {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateSlidePosition();
+            }
+        });
+
+        // Initialize presentation
+        updateSlidePosition();
     </script>
 
 </body>
